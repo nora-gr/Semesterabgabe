@@ -1,5 +1,5 @@
 """
-Datenbankhelfer – wird von main.py importiert.
+Datenbankhelfer uebernommen aus der Uebung – wird von main.py importiert.
 Diese Datei muss nicht veraendert werden.
 """
 import sqlite3
@@ -9,7 +9,7 @@ DB_PATH = Path("buchungen.db")
 
 
 def get_connection() -> sqlite3.Connection:
-    """Oeffnet eine SQLite-Verbindung mit row_factory fuer dict-artigen Zugriff."""
+    """Oeffnet eine SQLite-Verbindung."""
     conn = sqlite3.connect(DB_PATH)
     return conn
 

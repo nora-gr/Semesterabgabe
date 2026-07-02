@@ -1,5 +1,5 @@
 """
-Seed-Skript uebernommen aus der Vorlesung - befuellt die Datenbank mit Beispieldaten.
+Seed-Skript uebernommen aus der Uebung - befuellt die Datenbank mit Beispieldaten.
 
 Ausfuehren mit:
     uv run seed.py

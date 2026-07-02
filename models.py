@@ -1,5 +1,5 @@
 """
-Pydantic-Modelle – werden von main.py fuer Request-Validierung genutzt.
+Pydantic-Modelle uebernommen aus der Uebung – werden von main.py fuer Request-Validierung genutzt.
 Diese Datei muss nicht veraendert werden.
 """
 from pydantic import BaseModel, field_validator
