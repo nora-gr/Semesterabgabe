@@ -1,0 +1,12 @@
+[project]
+name = "semesterabgabe"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "fastapi[standard]>=0.139.0",
+    "jupyter>=1.1.1",
+    "pandas>=3.0.3",
+    "streamlit>=1.58.0",
+]
