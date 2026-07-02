@@ -173,7 +173,7 @@ chart_data = ( pd.DataFrame(
     "Betrag in €": [einnahmen, ausgaben, gewinn]
     }
 )).set_index("Bilanzposition")
-st.bar_chart(chart_data, color = "green")
+st.bar_chart(chart_data)
 
 # Beruecksichtigte Daten erneut in einer Tabelle anzeigen
 st.subheader("Berücksichtigte Buchungen:")
