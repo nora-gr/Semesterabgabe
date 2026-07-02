@@ -118,48 +118,76 @@ def mark_booking_paid(booking_id: int):
 
 
 # =============================================================
-# HAUSAUFGABE – GET /stats
+# GET /stats - gibt aggregierte Finanzstatistiken zurück.
 # =============================================================
+@app.get("/stats", tags=["Statistiken"], summary="Finanzstatistiken abrufen")
+def get_stats():
+    # Datenbank aufrufen
+    conn = get_connection()
+    # alle Buchungen in einen Dataframe laden
+    df = pd.read_sql_query(
+        "SELECT * FROM buchungen",
+        conn
+    )
+    
+    # Gesamtzahl aller Buchungen berechnen
+    total_bookings = len(df)
 
+    totals = df.groupby("booking_type")["amount_net"].sum()
+    # Summe aller Einnahmen berechnen
+    total_revenue = totals.get("revenue", 0)
+    # Summe aller Ausgaben berechnen
+    total_expenses = totals.get("expense", 0)
+    
+    # Gewinn berechnen
+    net_profit = total_revenue - total_expenses
 
-#@app.get("/stats", tags=["Statistiken"], summary="Finanzstatistiken abrufen")
-#def get_stats():
-    """
-    Gibt aggregierte Finanzstatistiken zurueck.
+    # Anteil bezahlter Buchungen in % (2 Nachkommastellen)
+    # Werte sind 1 oder 0, deshalb Mittelwert und dann mal 100
+    paid_rate_pct = df["is_paid"].mean() * 100
 
-    ╔══════════════════════════════════════════╗
-    ║  HAUSAUFGABE – Statistik-Endpunkt        ║
-    ╚══════════════════════════════════════════╝
-    Implementiere diesen Endpunkt so, dass er folgendes Dictionary liefert:
+    # Gruppen sortiert nach net absteigend auflisten
+    categories = df["category"].unique()
+    by_category = []
+    for category in categories:
+        revenue = df[(df["category"] == category) & (df["booking_type"] == "revenue")]["amount_net"].sum()
+        expenses = df[(df["category"] == category) & (df["booking_type"] == "expense")]["amount_net"].sum()
 
-    {
-        "total_bookings":  <int>,     Gesamtanzahl aller Buchungen
-        "total_revenue":   <float>,   Summe aller Einnahmen (booking_type='revenue')
-        "total_expenses":  <float>,   Summe aller Ausgaben  (booking_type='expense')
-        "net_profit":      <float>,   Einnahmen - Ausgaben
-        "paid_rate_pct":   <float>,   Anteil bezahlter Buchungen in % (2 Nachkommastellen)
-        "by_category": [
-            {
-                "category": <str>,
-                "revenue":  <float>,
-                "expenses": <float>,
-                "net":      <float>,
-                "count":    <int>
-            },
-#            ...                       sortiert nach net absteigend
-        ]
+        by_category.append({
+            "category": category,
+            "revenue": round(revenue, 2),
+            "expenses": round(expenses, 2),
+            "net": round(revenue - expenses, 2),
+            "count": len(df[df["category"] == category])
+        })
+        
+    # Kategorien sortieren
+    by_category.sort(
+        key = lambda x: x["net"],
+        reverse = True
+    )
+
+    # Ausgabe
+    return {
+        "total_bookings": total_bookings,
+        "total_revenue": round(total_revenue, 2),
+        "total_expenses": round(total_expenses, 2),
+        "net_profit": round(net_profit, 2),
+        "paid_rate_pct": round(paid_rate_pct, 2),
+        "by_category": by_category
     }
 
-    Hinweise:
-    - Lade alle Buchungen mit pd.read_sql_query() in einen DataFrame.
-    - Nutze pandas-Operationen (groupby, agg, sum, mean) fuer die Berechnungen.
-    - Alle float-Werte sollen auf 2 Nachkommastellen gerundet sein.
-    - Der Endpunkt soll auch bei einer leeren Datenbank ohne Fehler laufen
-      (z. B. paid_rate_pct = 0.0 wenn keine Buchungen vorhanden).
+    # Leere Datenbank abfangen
+    if df.empty: 
+        return {
+            "total_bookings": 0,
+            "total_revenue": 0.0,
+            "total_expenses": 0.0,
+            "net_profit": 0.0,
+            "paid_rate_pct": 0.0,
+            "by_category": []
+        }
 
-    WICHTIG fuer naechste Woche:
-    Dieser Endpunkt wird von einer Streamlit-App direkt aufgerufen.
-    Halte dich exakt an das Schema oben – Feldnamen und Typen muessen stimmen.
-    """
-#    # TODO: Implementierung hier
+    conn.close()
+ 
 #    raise HTTPException(status_code=501, detail="Noch nicht implementiert")
