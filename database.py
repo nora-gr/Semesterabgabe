@@ -1,5 +1,6 @@
 """
-Datenbankhelfer uebernommen aus der Uebung – wird von main.py importiert.
+Datenbankhelfer uebernommen aus der Uebung, nur um description ergaenzt
+– wird von main.py importiert.
 Diese Datei muss nicht veraendert werden.
 """
 import sqlite3
@@ -27,7 +28,8 @@ def init_db() -> None:
             partner_name TEXT    NOT NULL,
             amount_net   REAL    NOT NULL,
             currency     TEXT    NOT NULL DEFAULT 'EUR',
-            is_paid      INTEGER NOT NULL DEFAULT 0
+            is_paid      INTEGER NOT NULL DEFAULT 0,
+            description  TEXT
         )
         """
     )

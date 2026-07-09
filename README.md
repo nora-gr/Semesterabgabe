@@ -35,6 +35,9 @@ Anleitung zum lokalen Starten der Anwendung:
     Dokumentation muss manuell geöffnet werden: http://127.0.0.1:8000/docs
 5. Streamlit-Frontend starten (öffnet sich automatisch)
     uv run streamlit run app.py
+6. Login bei Streamlit
+    entweder mit username: admin    passwort: 1234
+    oder mit     username: user     passwort: 5678
 
 Anmerkung:
 Meine Kommentare zum Quellcode sind sehr detailiert verfasst. Das hat mir während des Programmierens sehr geholfen, um die einzelnen Code-Zeilen besser zu verstehen. Aus diesem Grund habe ich sie so ausführlich gelassen und vor der Abgabe nicht noch einmal gekürzt.

@@ -1,6 +1,6 @@
 """
-Pydantic-Modelle uebernommen aus der Uebung – werden von main.py fuer Request-Validierung genutzt.
-Diese Datei muss nicht veraendert werden.
+Pydantic-Modelle uebernommen aus der Uebung, nur um description ergaenzt
+– werden von main.py fuer Request-Validierung genutzt.
 """
 from pydantic import BaseModel, field_validator
 from typing import Literal
@@ -15,6 +15,7 @@ class BookingCreate(BaseModel):
     amount_net: float
     currency: str = "EUR"
     is_paid: bool = False
+    description: str
 
     @field_validator("amount_net")
     @classmethod

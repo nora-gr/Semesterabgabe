@@ -191,11 +191,12 @@ with st.form("neue_buchung"):
         booking_date = st.date_input("Buchungsdatum")
         booking_type = st.selectbox("Typ", ["revenue", "expense"])
         category = st.text_input("Kategorie")
+        description = st.text_input("Beschreibung")
     with col2:
         partner_name = st.text_input("Geschäftspartner")
         amount_net = st.number_input("Betrag (netto)", min_value=0.01, step=0.01)
         currency = st.text_input("Währung", value="EUR")
-        is_paid = st.checkbox("Bezahlt")
+        is_paid = st.checkbox("Bezahlt")     
 
     submitted = st.form_submit_button("Buchung erstellen")
 
@@ -208,13 +209,14 @@ if submitted:
         "amount_net": amount_net,
         "currency": currency,
         "is_paid": is_paid,
+        "description": description
     }
     response = requests.post(f"{API_URL}/bookings", json=buchung)
 
     if response.status_code == 201:
         neue_id = response.json().get("booking_id")
         st.success(f"Buchung wurde gespeichert (ID: {neue_id})")
-        # ergaenzt, damit neue Buchung sofort geladen wird
+        lade_buchungen.clear()# ergaenzt, damit neue Buchung sofort geladen wird
         st.rerun()  
     else:
         st.error(f"Fehler {response.status_code}: {response.json()}")
